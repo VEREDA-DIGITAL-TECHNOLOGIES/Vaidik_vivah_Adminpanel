@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  adminpanel-green:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: adminpanel:green
+    container_name: adminpanel-green
+    ports:
+      - "5176:5175"
+    env_file:
+      - .env
+    networks:
+      - app-network
+    restart: always
+    environment:
+      - TZ=Asia/Kolkata
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:5175"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 15s
+
+networks:
+  app-network:
+    external: true
+    name: vaidik_vivah_backend_app-network
